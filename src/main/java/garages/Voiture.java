@@ -28,9 +28,14 @@ public class Voiture {
 	 * @throws java.lang.Exception Si déjà dans un garage
 	 */
 	public void entreAuGarage(Garage g) throws Exception {
-		// Et si la voiture est déjà dans un garage ?
-		Stationnement s = new Stationnement(this, g);
-		myStationnements.add(s);
+                // On detecte si la voiture est dans un garage
+		if (this.estDansUnGarage() == true) {
+                    throw new UnsupportedOperationException("La voiture est déjà dans un autre garage");
+                }
+                else {
+                    Stationnement s = new Stationnement(this, g);
+                    myStationnements.add(s);
+                }
 	}
 
 	/**
@@ -40,27 +45,46 @@ public class Voiture {
 	 * @throws java.lang.Exception si la voiture n'est pas dans un garage
 	 */
 	public void sortDuGarage() throws Exception {
-		throw new UnsupportedOperationException("Pas encore implémenté");
-		// TODO: Implémenter cette méthode
-		// Trouver le dernier stationnement de la voiture
-		// Terminer ce stationnement
+                // On verifie si la voiture est dans un garage
+		if (this.estDansUnGarage() == false) {
+                    throw new UnsupportedOperationException("La voiture n'est pas dans un garage");
+                }
+                else {
+                    // On recupere le dernier stationnement en cours
+                    int taille = myStationnements.size();
+                    Stationnement s = myStationnements.get(taille - 1);
+                    // On modifie le statut du dernier stationnement
+                    s.terminer();
+                }
 	}
 
 	/**
 	 * @return l'ensemble des garages visités par cette voiture
 	 */
 	public Set<Garage> garagesVisites() {
-		// TODO: Implémenter cette méthode
-		throw new UnsupportedOperationException("Pas encore implémenté");
+                // On crée une liste vide ne pouvant pas contenir de doublons
+                Set<Garage> garages = new HashSet<>();
+                // On rajoute les garages sauvegardes dans myStationnements
+		for (int i = 0; i < myStationnements.size() - 1; i++) {
+                    garages.add(myStationnements.get(i).getGarage());
+                }
+                return garages;
 	}
 
 	/**
 	 * @return vrai si la voiture est dans un garage, faux sinon
 	 */
 	public boolean estDansUnGarage() {
-		// TODO: Implémenter cette méthode
-		throw new UnsupportedOperationException("Pas encore implémenté");
-		// Vrai si le dernier stationnement est en cours
+                // On cherche le dernier stationnement
+                int taille = myStationnements.size();
+                // On verifie si le dernier stationnement est en cours ou si la liste de stationnements est vide
+                if ((myStationnements.get(taille - 1).getFin() == null) || (taille == 0)) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+                
 	}
 
 	/**
@@ -78,8 +102,32 @@ public class Voiture {
 	 * @param out l'endroit où imprimer (ex: System.out)
 	 */
 	public void imprimeStationnements(PrintStream out) {
-		// TODO: Implémenter cette méthode
-		throw new UnsupportedOperationException("Pas encore implémenté");
-	}
-
+                int taille1 = myStationnements.size();
+                int taille2 = this.garagesVisites().size();
+                // On parcours la liste des garages visites
+                for (int i = 0; i < taille2 - 1; i++) {
+                Iterator<Garage> it = this.garagesVisites().iterator();
+                while (it.hasNext()) {
+                    Garage g = it.next();
+                    System.out.println("Garage " + g.getName() + ":");
+                    // On parcours la liste des stationnements visites et on verifie si c'est le garage que l'on souhaite afficher
+                    for (int j = 0; i < taille1 - 1; i++) {
+                        Stationnement s = myStationnements.get(j);
+                        String sortie = null;
+                        if (g.getName().equals(s.getGarage())) {
+                            // On detecte si ce staionnement est en cours ou non
+                            if (s.getFin() == null) {
+                                sortie = "en cours";
+                            }
+                            else {
+                                sortie = "sortie=" + s.getFin().toString();
+                            }
+                        String entree = "entree=" + s.getEntree();
+                        // On affiche les infos des stationnements pour le garage en question
+                        System.out.println("\t \t Stationnement{ " + entree + ", " + sortie + " }");
+                        }
+                    }
+                }
+            }
+        }
 }

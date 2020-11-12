@@ -1,7 +1,7 @@
 package garages;
 
 public class Main {
-
+    
 	public static void main(String[] args) throws Exception {
 		Voiture v1 = new Voiture("123 1BC 31");
 		Garage g1 = new Garage("Castres");
