@@ -55,6 +55,7 @@ public class Voiture {
                     Stationnement s = myStationnements.get(taille - 1);
                     // On modifie le statut du dernier stationnement
                     s.terminer();
+                    System.out.println(s.getFin());
                 }
 	}
 
@@ -65,7 +66,7 @@ public class Voiture {
                 // On crée une liste vide ne pouvant pas contenir de doublons
                 Set<Garage> garages = new HashSet<>();
                 // On rajoute les garages sauvegardes dans myStationnements
-		for (int i = 0; i < myStationnements.size() - 1; i++) {
+		for (int i = 0; i < myStationnements.size(); i++) {
                     garages.add(myStationnements.get(i).getGarage());
                 }
                 return garages;
@@ -76,15 +77,13 @@ public class Voiture {
 	 */
 	public boolean estDansUnGarage() {
                 // On cherche le dernier stationnement
-                int taille = myStationnements.size();
-                // On verifie si le dernier stationnement est en cours ou si la liste de stationnements est vide
-                if ((myStationnements.get(taille - 1).getFin() == null) || (taille == 0)) {
-                    return true;
-                }
-                else {
+                int taille = 0 + myStationnements.size();
+                if ((taille ==0) || (myStationnements.get(taille - 1).getFin() != null)) {
                     return false;
                 }
-                
+                else {
+                    return true;
+                }
 	}
 
 	/**
@@ -102,32 +101,28 @@ public class Voiture {
 	 * @param out l'endroit où imprimer (ex: System.out)
 	 */
 	public void imprimeStationnements(PrintStream out) {
-                int taille1 = myStationnements.size();
-                int taille2 = this.garagesVisites().size();
+                int nbrStationnements = myStationnements.size();
                 // On parcours la liste des garages visites
-                for (int i = 0; i < taille2 - 1; i++) {
                 Iterator<Garage> it = this.garagesVisites().iterator();
                 while (it.hasNext()) {
                     Garage g = it.next();
-                    System.out.println("Garage " + g.getName() + ":");
-                    // On parcours la liste des stationnements visites et on verifie si c'est le garage que l'on souhaite afficher
-                    for (int j = 0; i < taille1 - 1; i++) {
-                        Stationnement s = myStationnements.get(j);
+                    System.out.println(g.toString() + " :");
+                    for (int i = 0; i < nbrStationnements; i++) {
+                        Stationnement s = myStationnements.get(i);
+                        String entree = "entree=";
                         String sortie = null;
-                        if (g.getName().equals(s.getGarage())) {
-                            // On detecte si ce staionnement est en cours ou non
-                            if (s.getFin() == null) {
+                        if (s.getGarage().equals(g)) {
+                            entree = entree + s.getEntree().toString();
+                            if (s.estEnCours() == true) {
                                 sortie = "en cours";
                             }
                             else {
-                                sortie = "sortie=" + s.getFin().toString();
+                                sortie = "sortie=" + s.getFin();
                             }
-                        String entree = "entree=" + s.getEntree();
-                        // On affiche les infos des stationnements pour le garage en question
-                        System.out.println("\t \t Stationnement{ " + entree + ", " + sortie + " }");
-                        }
+                            System.out.println("        Stationnement{ " + entree + ", " + sortie + " }");
+                        }   
                     }
                 }
-            }
         }
+        
 }
