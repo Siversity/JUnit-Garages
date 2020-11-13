@@ -106,7 +106,7 @@ public class Voiture {
                 Iterator<Garage> it = this.garagesVisites().iterator();
                 while (it.hasNext()) {
                     Garage g = it.next();
-                    System.out.println(g.toString() + " :");
+                    out.print(g.toString() + " :" + "\n");
                     for (int i = 0; i < nbrStationnements; i++) {
                         Stationnement s = myStationnements.get(i);
                         String entree = "entree=";
@@ -119,7 +119,7 @@ public class Voiture {
                             else {
                                 sortie = "sortie=" + s.getFin();
                             }
-                            System.out.println("        Stationnement{ " + entree + ", " + sortie + " }");
+                            out.print("\t" + "\t" + "Stationnement{ " + entree + ", " + sortie + " }" + "\n");
                         }   
                     }
                 }
